@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.28307.852
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyServers", "MyServers\MyServers.csproj", "{7A7AED0E-2DD3-480E-A517-56939C2D3D49}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameServer", "GameServer\GameServer.csproj", "{A0CE3AD9-D926-40F3-B8A9-AFF3DF0B3451}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Protocol", "Protocol\Protocol.csproj", "{C67220DA-FCE6-43E4-8A3E-1C8FF42EE706}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{7A7AED0E-2DD3-480E-A517-56939C2D3D49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A7AED0E-2DD3-480E-A517-56939C2D3D49}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A7AED0E-2DD3-480E-A517-56939C2D3D49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0CE3AD9-D926-40F3-B8A9-AFF3DF0B3451}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0CE3AD9-D926-40F3-B8A9-AFF3DF0B3451}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0CE3AD9-D926-40F3-B8A9-AFF3DF0B3451}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0CE3AD9-D926-40F3-B8A9-AFF3DF0B3451}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C67220DA-FCE6-43E4-8A3E-1C8FF42EE706}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C67220DA-FCE6-43E4-8A3E-1C8FF42EE706}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C67220DA-FCE6-43E4-8A3E-1C8FF42EE706}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C67220DA-FCE6-43E4-8A3E-1C8FF42EE706}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

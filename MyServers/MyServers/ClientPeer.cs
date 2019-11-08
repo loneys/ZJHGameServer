@@ -11,14 +11,21 @@ namespace MyServers
     {
         public Socket clientSocket { get; set; }
 
-        public SocketAsyncEventArgs ReceiveArgs { get; set; }
+        private NetMsg msg;
 
         public ClientPeer()
         {
+            msg = new NetMsg();
             ReceiveArgs = new SocketAsyncEventArgs();
             ReceiveArgs.UserToken = this;
             ReceiveArgs.SetBuffer(new byte[2048], 0, 2048);
         }
+
+        #region 接收数据
+        /// <summary>
+        /// 接收的异步套接字操作
+        /// </summary>
+        public SocketAsyncEventArgs ReceiveArgs { get; set; }
 
         /// <summary>
         /// 接收到消息后，存放到数据缓存区
@@ -75,13 +82,53 @@ namespace MyServers
             ProcessData();
         }
 
+        #endregion
+
+        #region 发送消息
+        /// <summary>
+        /// 发送消息
+        /// </summary>
+        /// <param name="opCode">操作码</param>
+        /// <param name="subCode">子操作码</param>
+        /// <param name="value">参数</param>
+        public void SendMsg(int opCode,int subCode,object value)
+        {
+            msg.change(opCode, subCode, value);
+            byte[] data = EncodeTool.EncodeMsg(msg);
+            byte[] packet = EncodeTool.EncodePacket(data);
+            SendMsg(packet);
+        }
+
+        private void SendMsg(byte[] packet)
+        {
+            try
+            {
+                clientSocket.Send(packet);
+            }
+            catch (Exception e)
+            {
+
+                Console.WriteLine(e.Message);
+            }
+        }
+
+        #endregion
+
+        #region 断开连接
+
         /// <summary>
         /// 断开连接
         /// </summary>
         public void DisConnect()
         {
-
+            cache.Clear();
+            isProcessingReceive = false;
+            clientSocket.Shutdown(SocketShutdown.Both);
+            clientSocket.Close();
+            clientSocket = null;
         }
+
+        #endregion
 
     }
 }

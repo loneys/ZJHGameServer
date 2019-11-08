@@ -21,6 +21,16 @@ namespace MyServers
         private ClientPeerPool clientPeerPool;
 
         /// <summary>
+        /// 应用层
+        /// </summary>
+        private IApplication application;
+
+        public void SetApplication(IApplication application)
+        {
+            this.application = application;
+        }
+
+        /// <summary>
         /// 开启服务器
         /// </summary>
         public void StartServer(string ip, int port, int maxClient)
@@ -181,7 +191,8 @@ namespace MyServers
         /// <param name="msg"></param>
         private void ReceiveProcessCompleted(ClientPeer client,NetMsg msg)
         {
-            //TODO
+            //交给应用层处理完成后的回调
+            application.Receive(client, msg);
         }
 
         #endregion
@@ -201,6 +212,7 @@ namespace MyServers
                     throw new Exception("客户端为空,无法断开连接");
                 }
                 Console.WriteLine(client.clientSocket.RemoteEndPoint + "客户端断开连接,原因：" + reason);
+                application.Disconnect(client);
                 //让客户端断开连接
                 client.DisConnect();
                 clientPeerPool.Enqueue(client);

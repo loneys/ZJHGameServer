@@ -4,16 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7A7AED0E-2DD3-480E-A517-56939C2D3D49}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MyServers</RootNamespace>
-    <AssemblyName>MyServers</AssemblyName>
+    <ProjectGuid>{A0CE3AD9-D926-40F3-B8A9-AFF3DF0B3451}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>GameServer</RootNamespace>
+    <AssemblyName>GameServer</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -41,13 +43,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientPeer.cs" />
-    <Compile Include="ClientPeerPool.cs" />
-    <Compile Include="EncodeTool.cs" />
-    <Compile Include="IApplication.cs" />
-    <Compile Include="NetMsg.cs" />
+    <Compile Include="NetMsgCenter.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServerPeer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MyServers\MyServers.csproj">
+      <Project>{7a7aed0e-2dd3-480e-a517-56939c2d3d49}</Project>
+      <Name>MyServers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Protocol\Protocol.csproj">
+      <Project>{c67220da-fce6-43e4-8a3e-1c8ff42ee706}</Project>
+      <Name>Protocol</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
