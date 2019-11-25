@@ -18,6 +18,7 @@ namespace Protocol.Dto
         {
             this.userName = userName;
             this.password = password;
+            Console.WriteLine("--wangzhi--消息内容:" + userName + " " + password);
         }
 
         public void Change(string userName, string password)

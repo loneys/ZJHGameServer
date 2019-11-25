@@ -9,6 +9,8 @@ namespace MyServers
 {
     public class ClientPeer
     {
+        public int Id { get; set; }
+        public string UserName { get; set; }
         public Socket clientSocket { get; set; }
 
         private NetMsg msg;
@@ -93,6 +95,7 @@ namespace MyServers
         /// <param name="value">参数</param>
         public void SendMsg(int opCode,int subCode,object value)
         {
+            Console.WriteLine("--发送消息--" + opCode + "   " + subCode);
             msg.change(opCode, subCode, value);
             byte[] data = EncodeTool.EncodeMsg(msg);
             byte[] packet = EncodeTool.EncodePacket(data);

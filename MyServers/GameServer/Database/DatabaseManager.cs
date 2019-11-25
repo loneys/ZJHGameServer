@@ -1,4 +1,6 @@
-﻿using MySql.Data.MySqlClient;
+﻿using MyServers;
+using MySql.Data.MySqlClient;
+using Protocol.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +12,16 @@ namespace GameServer.Database
     public class DatabaseManager
     {
         private static MySqlConnection sqlConcect;
+        private static Dictionary<int, ClientPeer> idClientDic;
+        private static RankListDto rankListDto;
 
         /// <summary>
         /// 连接mysql
         /// </summary>
         public static void StartConnect()
         {
+            rankListDto = new RankListDto();
+            idClientDic = new Dictionary<int, ClientPeer>();
             string conStr = "database=zjhgame;data source = 127.0.0.1;port=3306;user = root;pwd=root";
             sqlConcect = new MySqlConnection(conStr);
             sqlConcect.Open();
@@ -93,6 +99,122 @@ namespace GameServer.Database
             }
             reader.Close();
             return false;
+        }
+
+        /// <summary>
+        /// 登录上线
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="client"></param>
+        public static void Login(string userName,ClientPeer client)
+        {
+            //登录后设置玩家的状态为在线
+            MySqlCommand cmd = new MySqlCommand("update userinfo set Online=true where UserName = @name", sqlConcect);
+            cmd.Parameters.AddWithValue("name", userName);
+            cmd.ExecuteNonQuery();
+
+            //给玩家对象赋值id和username,并加入字典
+            MySqlCommand cmd1 = new MySqlCommand("select * from userinfo where UserName=@name", sqlConcect);
+            cmd1.Parameters.AddWithValue("name", userName);
+            MySqlDataReader reader = cmd1.ExecuteReader();
+            if (reader.HasRows)
+            {
+                reader.Read();
+                int id = reader.GetInt32("Id");
+                client.Id = id;
+                client.UserName = userName;
+                if (idClientDic.ContainsKey(id) == false)
+                {
+                    idClientDic.Add(id, client);
+                }
+            }
+            reader.Close();
+        }
+
+        public static void OffLine(ClientPeer client)
+        {
+            if (idClientDic.ContainsKey(client.Id))
+            {
+                idClientDic.Remove(client.Id);
+            }
+            MySqlCommand cmd = new MySqlCommand("update userinfo set Online=false where Id=@id", sqlConcect);
+            cmd.Parameters.AddWithValue("id", client.Id);
+            cmd.ExecuteNonQuery();
+        }
+
+        /// <summary>
+        /// 使用用户id获取客户端连接对象
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static ClientPeer GetClientPeerByUserId(int id)
+        {
+            if (idClientDic.ContainsKey(id))
+            {
+                return idClientDic[id];
+            }
+            return null;
+        }
+
+        public static UserDto CreateUserDto(int userId)
+        {
+            MySqlCommand cmd = new MySqlCommand("select *from userinfo where Id=@id",sqlConcect);
+            cmd.Parameters.AddWithValue("id", userId);
+            MySqlDataReader reader = cmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                reader.Read();
+                UserDto dto = new UserDto(userId, reader.GetString("UserName"), reader.GetString("IconName"), reader.GetInt32("Coin"));
+                reader.Close();
+                return dto;
+            }
+            reader.Close();
+            return null;
+
+        }
+        /// <summary>
+        /// 获取排行榜信息
+        /// </summary>
+        /// <returns></returns>
+        public static RankListDto GetRankListDto()
+        {
+            MySqlCommand cmd = new MySqlCommand("select UserName,Coin from userinfo order by Coin desc", sqlConcect);
+            MySqlDataReader reader = cmd.ExecuteReader();
+            rankListDto.Clear();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    RankItemDto dto = new RankItemDto(reader.GetString("UserName"), reader.GetInt32("Coin"));
+                    rankListDto.Add(dto);
+                }
+                reader.Close();
+                return rankListDto;
+            }
+            reader.Close();
+            return null;
+        }
+
+        public static int UpdateCoinCount(int userId,int value)
+        {
+            MySqlCommand cmd = new MySqlCommand("select Coin from userinfo where Id =@id ", sqlConcect);
+            cmd.Parameters.AddWithValue("id", userId);
+            MySqlDataReader reader = cmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                reader.Read();
+                int remainCoinCount = reader.GetInt32("Coin");
+                reader.Close();
+
+                MySqlCommand cmdUpdate = new MySqlCommand("update userinfo set Coin=@coin where Id = @id", sqlConcect);
+                cmdUpdate.Parameters.AddWithValue("coin", remainCoinCount + value);
+                cmdUpdate.Parameters.AddWithValue("id", userId);
+                cmdUpdate.ExecuteNonQuery();
+
+                return remainCoinCount + value;
+            }
+            reader.Close();
+            return 0;
         }
     }
 }

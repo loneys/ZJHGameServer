@@ -12,13 +12,15 @@ namespace GameServer.Logic
 {
     public class AccountHandler : IHandler
     {
-        public void Disconnect(ClientPeer clientPeer)
+        public void Disconnect(ClientPeer client)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("客户端断开连接");
+            DatabaseManager.OffLine(client);
         }
 
         public void Receive(ClientPeer client, int subCode, object value)
         {
+            
             switch (subCode)
             {
                 case AccountCode.Register_CREQ:
@@ -27,9 +29,55 @@ namespace GameServer.Logic
                 case AccountCode.Login_CREQ:
                     Login(client, value as AccountDto);
                     break;
+                case AccountCode.GetUserInfo_CREQ:
+                    GetUserInfo(client); 
+                    break;
+                case AccountCode.GetRankList_CREQ:
+                    GetRankList(client);
+                    break;
+                case AccountCode.UpdateCoinCount_CREQ:
+                    UpdateCoinCount(client, (int)value);
+                    break;
                 default:
                     break;
             }
+        }
+
+        private void UpdateCoinCount(ClientPeer client,int coinCount)
+        {
+            SingleExecute.Instance.Execute(() =>
+            {
+                int totalCoin = DatabaseManager.UpdateCoinCount(client.Id, coinCount);
+                client.SendMsg(OpCode.Account, AccountCode.UpdateCoinCount_SRES, totalCoin);
+            });
+        }
+        /// <summary>
+        /// 客户端获取排行榜的请求处理
+        /// </summary>
+        /// <param name="client"></param>
+        private void GetRankList(ClientPeer client)
+        {
+            SingleExecute.Instance.Execute(() =>
+            {
+                Console.WriteLine("请求排行榜信息");
+                RankListDto dto = DatabaseManager.GetRankListDto();
+                client.SendMsg(OpCode.Account, AccountCode.GetRankList_SRES, dto);
+                Console.WriteLine("发送排行榜信息"+OpCode.Account+ AccountCode.GetRankList_SRES);
+
+            });
+        }
+
+        /// <summary>
+        /// 客户端获取用户信息的请求
+        /// </summary>
+        /// <param name="client"></param>
+        private void GetUserInfo(ClientPeer client)
+        {
+            SingleExecute.Instance.Execute(() =>
+            {
+                UserDto dto = DatabaseManager.CreateUserDto(client.Id);
+                client.SendMsg(OpCode.Account, AccountCode.GetUserInfo_SRES, dto);
+            });
         }
 
         /// <summary>
@@ -59,8 +107,10 @@ namespace GameServer.Logic
                 {
                     //该账号已在线
                     client.SendMsg(OpCode.Account, AccountCode.Login_SRES, -3);
-                    return;
+                    //return;
                 }
+                DatabaseManager.Login(dto.userName, client);
+                client.SendMsg(OpCode.Account, AccountCode.Login_SRES, 0);
 
             });
         }

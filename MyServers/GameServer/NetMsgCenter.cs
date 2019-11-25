@@ -40,19 +40,20 @@ namespace GameServer
         /// <param name="msg"></param>
         public void Receive(ClientPeer client, NetMsg msg)
         {
+            Console.WriteLine("--接收消息--" + msg.opCode + "   " + msg.subCode);
             switch (msg.opCode)
             {
                 case OpCode.Account:
-                    accountHandler.Receive(client, msg.opCode, msg.value);
+                    accountHandler.Receive(client, msg.subCode, msg.value);
                     break;
                 case OpCode.Match:
-                    matchHandler.Receive(client, msg.opCode, msg.value);
+                    matchHandler.Receive(client, msg.subCode, msg.value);
                     break;
                 case OpCode.Chat:
-                    chatHandler.Receive(client, msg.opCode, msg.value);
+                    chatHandler.Receive(client, msg.subCode, msg.value);
                     break;
                 case OpCode.Fight:
-                    fightHandler.Receive(client, msg.opCode, msg.value);
+                    fightHandler.Receive(client, msg.subCode, msg.value);
                     break;
                 default:
                     break;
