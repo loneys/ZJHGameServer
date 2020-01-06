@@ -1,8 +1,2 @@
 D:\GitProject\ZJHGameServer\MyServers\Protocol\bin\Debug\Protocol.dll
 D:\GitProject\ZJHGameServer\MyServers\Protocol\bin\Debug\Protocol.pdb
-D:\GitProject\ZJHGameClient\Assets\Scripts\Protocol.dll
-D:\GitProject\ZJHGameClient\Assets\Scripts\Protocol.pdb
-D:\GitProject\ZJHGameServer\MyServers\Protocol\obj\Debug\Protocol.csprojAssemblyReference.cache
-D:\GitProject\ZJHGameServer\MyServers\Protocol\obj\Debug\Protocol.csproj.CoreCompileInputs.cache
-D:\GitProject\ZJHGameServer\MyServers\Protocol\obj\Debug\Protocol.dll
-D:\GitProject\ZJHGameServer\MyServers\Protocol\obj\Debug\Protocol.pdb

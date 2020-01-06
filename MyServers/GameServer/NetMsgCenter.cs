@@ -20,6 +20,11 @@ namespace GameServer
         private ChatHandler chatHandler = new ChatHandler();
         private FightHandler fightHandler = new FightHandler();
 
+        public NetMsgCenter()
+        {
+            matchHandler.startFight += fightHandler.StartFight;
+        }
+
         /// <summary>
         /// 断开连接
         /// </summary>

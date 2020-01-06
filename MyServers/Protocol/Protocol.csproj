@@ -43,8 +43,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\AccountCode.cs" />
+    <Compile Include="Code\FightCode.cs" />
+    <Compile Include="Code\MatchCode.cs" />
     <Compile Include="Code\OpCode.cs" />
+    <Compile Include="Constant\CardType.cs" />
+    <Compile Include="Constant\Identity.cs" />
     <Compile Include="Dto\AccountDto.cs" />
+    <Compile Include="Dto\Fight\CardDto.cs" />
+    <Compile Include="Dto\MatchRoomDto.cs" />
+    <Compile Include="Dto\PlayerDto.cs" />
     <Compile Include="Dto\RankItemDto.cs" />
     <Compile Include="Dto\RankListDto.cs" />
     <Compile Include="Dto\UserDto.cs" />

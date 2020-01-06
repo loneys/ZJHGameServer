@@ -1,6 +1,0 @@
-D:\GitProject\ZJHGameServer\MyServers\MyServers\bin\Debug\MyServers.dll
-D:\GitProject\ZJHGameServer\MyServers\MyServers\bin\Debug\MyServers.pdb
-D:\GitProject\ZJHGameServer\MyServers\MyServers\obj\Debug\MyServers.csprojAssemblyReference.cache
-D:\GitProject\ZJHGameServer\MyServers\MyServers\obj\Debug\MyServers.csproj.CoreCompileInputs.cache
-D:\GitProject\ZJHGameServer\MyServers\MyServers\obj\Debug\MyServers.dll
-D:\GitProject\ZJHGameServer\MyServers\MyServers\obj\Debug\MyServers.pdb

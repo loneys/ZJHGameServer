@@ -8,7 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace MyServers
 {
-    class EncodeTool
+    public class EncodeTool
     {
         /// <summary>
         /// 构造包 包头+包尾
