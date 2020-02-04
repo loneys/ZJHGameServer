@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GameServer.Cache;
 using GameServer.Cache.Fight;
+using GameServer.Database;
 using MyServers;
 using Protocol.Code;
 
@@ -23,7 +24,61 @@ namespace GameServer.Logic
 
         public void Receive(ClientPeer client, int subCode, object value)
         {
+            switch (subCode)
+            {
+                case FightCode.Leave_CREQ:
+                    LeaveRoom(client);
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
 
+        /// <summary>
+        /// 客户端离开请求的处理
+        /// </summary>
+        /// <param name="client"></param>
+        private void LeaveRoom(ClientPeer client)
+        {
+            SingleExecute.Instance.Execute(() =>
+            {
+                //不在战斗房间,忽略
+                if (fightCache.IsFighting(client.Id) == false)
+                {
+                    return;
+                }
+
+                FightRoom room = fightCache.GetFightRoomByUserId(client.Id);
+                room.leaveUserIdList.Add(client.Id);
+
+                DatabaseManager.UpdateCoinCount(client.Id, -(room.bottomStakes * 20));
+                room.Broadcase(OpCode.Fight, FightCode.Leave_BRO, client.Id);
+
+                if (room.leaveUserIdList.Count == 1)
+                {
+                    if (room.giveUpCardUserIdList.Count == 0)
+                    {
+                        //离开的玩家是本次下注的玩家
+                        //这样需转换下一个玩家下注
+                        if (room.roundModel.CurrentStakesUserId == client.Id)
+                        {
+                            //轮换下注TODO
+
+                        }
+                    }
+                }
+
+                if (room.leaveUserIdList.Count == 2)
+                {
+                    //TODO
+                    return;
+                }
+                if (room.leaveUserIdList.Count == 3)
+                {
+                    fightCache.DestoryRoom(room);
+                }
+            });
         }
 
         /// <summary>

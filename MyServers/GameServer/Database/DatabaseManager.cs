@@ -206,6 +206,24 @@ namespace GameServer.Database
                 int remainCoinCount = reader.GetInt32("Coin");
                 reader.Close();
 
+                int afterCoin = 0;
+                if (value < 0)
+                {
+                    if (remainCoinCount < -value)
+                    {
+                        afterCoin = 0;
+                    }
+                    else
+                    {
+                        afterCoin = remainCoinCount + value;
+    
+                    }
+                }
+                else
+                {
+                    afterCoin = remainCoinCount + value;
+                }
+
                 MySqlCommand cmdUpdate = new MySqlCommand("update userinfo set Coin=@coin where Id = @id", sqlConcect);
                 cmdUpdate.Parameters.AddWithValue("coin", remainCoinCount + value);
                 cmdUpdate.Parameters.AddWithValue("id", userId);

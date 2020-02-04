@@ -11,5 +11,7 @@ namespace Protocol.Code
     public class FightCode
     {
         public const int StartFight_BRO = 0;
+        public const int Leave_CREQ = 1;
+        public const int Leave_BRO = 2;
     }
 }
